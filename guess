@@ -1,0 +1,49 @@
+import random
+
+class GuessTheWord:
+    def __init__(self, wordlist):
+        self.wordlist = wordlist
+        self.S_word = ""
+        self.attempts = 0
+        self.maxAttempts = 3
+        self.displayWord = ""
+
+    def start(self):
+        self.S_word = random.choice(self.wordlist)
+        self.attempts = 0 
+        self.displayWord = self.createDisplayWord()
+        print("Try Guess The Word")
+        print(f"Word guess: {self.displayWord}")
+
+    def createDisplayWord(self):
+        display = ['_' if random.random() < 0.5 else char for char in self.S_word]
+        return ''.join(display)
+
+    def makeGuess(self, guess: str):
+        self.attempts += 1
+        if guess.lower() == self.S_word.lower():
+            return "You have guessed the word!"
+        elif self.attempts >= self.maxAttempts:
+            return f"Game Over! The word was: {self.S_word}"
+        else:
+            return f"Wrong guess! {self.maxAttempts - self.attempts} attempts left..."
+
+def main():
+    wordlist = ["pneumonoultramicroscopicsilicovolcanoconiosis", "gilgamesh", "axolotl", "bryology", "anker"]
+    while True:
+        game = GuessTheWord(wordlist=wordlist)
+        game.start()
+        while game.attempts < game.maxAttempts:
+            player = input("Your guess: ")
+            result = game.makeGuess(player)
+            print(result)
+            if "You have" in result or "Game Over" in result:
+                break
+        again = input("Want to play again? (Y/N): ").strip().upper()
+        if again != 'Y':
+            print("Thank you for playing!")
+            break
+
+if __name__ == "__main__":
+    main()
+
